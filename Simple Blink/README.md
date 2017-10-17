@@ -12,7 +12,7 @@ The LED will blink at a 50% duty cyle meaning the LED will be on an off for an e
 
 ## Code Configuration
 
-The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled at x's.
+The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's.
 
 ```c
 	int main(void)
@@ -36,13 +36,15 @@ The following code can be used on all of the boards. The only change that is nee
 ## Pin Assignments
 
 Depending on which LED is chosen to blink, the following pin assignments will declare the corresponding LED to blink:
-		
+
+```c		
 		   LED1		LED2
 * MSP430G2553	=> P1.0 	P1.6
 * MSP430F5529	=> P1.0 	P4.7
 * MSP430FR2311	=> P1.0 	P2.0
 * MSP430FR5994	=> P1.0 	P1.1
 * MSP430FR6989	=> P1.0 	P9.7
+```
 
 ## Code Example
 
@@ -74,6 +76,6 @@ The rate at which the LED blinks can simply be modified in the following line of
 
 ```
 Adjusting the value of x will control the rate of the blink.
-	- A greater value of x will result in a slower blink rate
-	- A smaller value of x will result in a faster blink rate
-	- Using a value of 100000 for x will cause the LED to blink eve 0.1s
+*A greater value of x will result in a slower blink rate
+*A smaller value of x will result in a faster blink rate
+*Using a value of 100000 for x will cause the LED to blink eve 0.1s
