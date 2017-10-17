@@ -12,7 +12,7 @@ The LED will blink at a 50% duty cyle meaning the LED will be on an off for an e
 
 ## Code Configuration
 
-The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's.
+The following code can be used on all of the boards. The only change that is needed to be made is the pin assignments labeled as x's.
 
 ```c
 	int main(void)

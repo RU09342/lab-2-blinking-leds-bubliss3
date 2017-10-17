@@ -1,6 +1,6 @@
 # Multiple Blink
 
-Making multiple LEDs blink at differnt rates on 5 different MSP430 microcontrollers:
+Making multiple LEDs blink at different rates on 5 different MSP430 microcontrollers:
 
 * MSP430G2553
 * MSP430F5529
@@ -12,7 +12,7 @@ The following code will make LED2 blink 3x faster than LED1
 
 ## Code Configuration
 
-The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's for LED1 and y's for LED2
+The following code can be used on all of the boards. The only change that is needed to be made is the pin assignments labeled as x's for LED1 and y's for LED2
 
 ```c
 	int main(void)
