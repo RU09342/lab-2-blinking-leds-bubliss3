@@ -36,7 +36,7 @@ The following code can be used on all of the boards. The only change that is nee
 ```
 ## Breadboard Demonstration
 
-![alt text](lab-2-blinking-leds-bubliss3/Off_Board Blink/ezgif.com-video-to-gif.gif)
+![alt text](https://github.com/RU09342/lab-2-blinking-leds-bubliss3/blob/master/Off_Board%20Blink/ezgif.com-video-to-gif.gif)
 
 ## Code Example
 
