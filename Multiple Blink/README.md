@@ -1,25 +1,89 @@
 # Multiple Blink
-Now that we have blinked at least 1 LED, what about blinking multiple LEDS at the same time? The minimum that you need to develop is blinking at least two LEDs at two different rates. Although I am not going to give you a speed, you should probably pick a rate which is visible to a standard human. I really hope that you take this further and perform some of the extra work for this part of the lab exercise.
 
+Making multiple LEDs blink at differnt rates on 5 different MSP430 microcontrollers:
 
-# YOU NEED TO CREATE THE FOLLOWING FOLDERS
 * MSP430G2553
 * MSP430F5529
 * MSP430FR2311
 * MSP430FR5994
 * MSP430FR6989
 
-## README
-Remember to replace this README with your README once you are ready to submit. I would recommend either making a copy of this file or taking a screen shot. There might be a copy of all of these README's in a folder on the top level depending on the exercise.
+The following code will make LED2 blink 3x faster than LED1
 
-## Extra Work
-When you take a look at the development boards, you are limited to what is built into the platform.
+## Code Configuration
 
-### Even More LEDs
-Since up to this point you should have hopefully noticed that you are simply just controlling each pin on your processor. So... what is keeping you from putting an LED on each pin? Can you actually control the speed of each of these LEDs?
+The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's for LED1 and y's for LED2
 
-### Patterned Lights
-If you can control a ton of LEDs, what is keeping you from having a little fun? Why not try and make something like a moving face or other moving object in lights. *CAUTION* I would only do this if you have finished the rest of the lab.
+```c
+	int main(void)
+	{
+    		WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
 
-### UART Pattern Control
-If you have been using UART, could you set which LEDs are on or off based off some UART command? Would you want to send an Array over UART such as [1 0 1 0] or would you want to send a byte that corresponds to the status? Can you not only say which LEDs are on, but also tell them to blink at a particular rate if they were on (so LED1 Blink every 100ms)?
+    		PxDIR |= BITx;  //Declare LED1 Px.x as output
+    		PyDIR |= BITy;  //Declare LED2 Py.y as output
+
+		PM5CTL0 &= ~LOCKLPM5;		    // Disable the GPIO power-on default high-impedance mode
+                                                    // to activate previously configured port settings
+						    // Use for FR6989, FR5994, and FR2311
+    		while(1)
+    		{
+       			PxOUT ^= BITx;   // Toggle Px.x (LED1)
+       			PyOUT ^= BITy;   // Toggle Py.y	(LED2)
+       			_delay_cycles(200000);
+       			PyOUT ^= BITy;
+       			_delay_cycles(200000);   //LED2 will blink 3x as fast as LED1
+       			PyOUT ^= BITy;
+       			_delay_cycles(200000);
+    		}
+	}
+```
+## Pin Assignments
+
+Depending on which LED is chosen to blink, the following pin assignments will declare the corresponding LED to blink:
+
+```c		
+		   LED1		LED2
+* MSP430G2553	=> P1.0 	P1.6
+* MSP430F5529	=> P1.0 	P4.7
+* MSP430FR2311	=> P1.0 	P2.0
+* MSP430FR5994	=> P1.0 	P1.1
+* MSP430FR6989	=> P1.0 	P9.7
+```
+
+## Code Example
+
+Make LED2 on the MSP430F5529 blink 3x faster than LED1 
+
+```c
+	int main(void)
+	{
+    		WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
+
+    		P1DIR |= BIT0;  //Declare pin 1.0 as output
+    		P4DIR |= BIT7;  //Declare pin 4.7 as output
+
+
+    		while(1)
+    		{
+       			P1OUT ^= BIT0;   // Toggle P1.0
+       			P4OUT ^= BIT7;   // Toggle P4.7
+       			_delay_cycles(200000);
+       			P4OUT ^= BIT7;
+       			_delay_cycles(200000);   //LED2 will blink 3x as fast as LED1
+       			P4OUT ^= BIT7;
+       			_delay_cycles(200000);
+    		}
+	}
+```
+
+## LED Blink Rate
+
+The rate at which the LED blinks can simply be modified in the following line of code:
+
+```c
+    __delay_cycles(x);
+
+```
+Adjusting the value of x will control the rate of the blink.
+* A greater value of x will result in a slower blink rate
+* A smaller value of x will result in a faster blink rate
