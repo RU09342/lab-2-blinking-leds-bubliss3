@@ -10,64 +10,49 @@ Be advised that you can easily damage or destroy one of the pins on the MSP430 b
 
 ## Programming the G2553
 
-
-## Code Configuration
-
-The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's.
+Before we can remove the G2553 from the launchpad we much first program it to run the code we want. We will use simple code that blinks two LEDs. 
 
 ```c
 	int main(void)
 	{
-    		WDTCTL = WDTPW | WDTHOLD;           // Stop watchdog timer
+    		WDTCTL = WDTPW | WDTHOLD;// Stop watchdog timer
 
-    		PxOUT &= ~BITx;                     // Clear Px.x output latch for a defined power-on state
-    		PxDIR |= BITx;                      // Set Px.x to output direction
+    		P1DIR |= 0x41; // Set P1.0 and P1.6 to output direction
+    		P1OUT |= 0x01;
 
-		PM5CTL0 &= ~LOCKLPM5;		    // Disable the GPIO power-on default high-impedance mode
-                                                    // to activate previously configured port settings
-						    // Use for FR6989, FR5994, and FR2311 
-    		while(1)
-    		{
-        		PxOUT ^= BITx;              // Toggle Px.x using exclusive-OR
-        		__delay_cycles(100000);    // Delay for 100000*(1/MCLK)=0.1s
-    		}
+		for(;;)
+		{
+   			P1OUT ^= 0x01;  // Toggle P1.0 using exclusive-OR
+   			P1OUT ^= 0x40;	// Toggle P1.6 using exclusive-OR
 
+   			_delay_cycles(200000); //Control the rate at which the LEDs blink
+		}
 	}
 ```
+## Implementation
+
+After the code has been compiled onto the G2553 the chip can be placed on a breadboard. To wire up the G2553 chip:
+
+* A 3.3V source was connected to Pin 1 (DVCC)
+* LED1 was connected to Pin 2 of the chip in series with a 1k resistor
+* LED2 was connected to Pin 14 of the chip in series with a 1k resistor
+* Pin 16 (RESET) was connected to power using a 1K to stop the chip from reseting
+* A bypass capacitor of 0.1 uF was hooked up from Pin 1 (DVCC) to GND
+
+![alt text](https://github.com/RU09342/lab-2-blinking-leds-bubliss3/blob/master/msp430G2553.png)
+
 ## Breadboard Demonstration
 
 ![alt text](https://github.com/RU09342/lab-2-blinking-leds-bubliss3/blob/master/Off_Board%20Blink/ezgif.com-video-to-gif.gif)
 
-## Code Example
-
-Make LED2 on the MSP430F5529 blink
-
-```c
-	int main(void)
-	{
-    		WDTCTL = WDTPW | WDTHOLD;           // Stop watchdog timer
-
-    		P4OUT &= ~BIT7;                     // Clear Px.x output latch for a defined power-on state
-    		P4DIR |= BIT7;                      // Set Px.x to output direction
-
-    		while(1)
-    		{
-        		P4OUT ^= BIT7;              // Toggle Px.x using exclusive-OR
-        		__delay_cycles(100000);    // Delay for 100000*(1/MCLK)=0.1s
-    		}
-
-	}
-```
-
 ## LED Blink Rate
 
-The rate at which the LED blinks can simply be modified in the following line of code:
+The rate at which the LEDs blink can simply be modified in the following line of code:
 
 ```c
-    __delay_cycles(x);    // Delay for x*(1/MCLK) seconds
+    __delay_cycles(x);
 
 ```
 Adjusting the value of x will control the rate of the blink.
 * A greater value of x will result in a slower blink rate
 * A smaller value of x will result in a faster blink rate
-* Using a value of 100000 for x will cause the LED to blink eve 0.1s

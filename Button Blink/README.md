@@ -1,6 +1,6 @@
 # Button Blink
 
-Control the state on and LED using a button
+Control the state of the LED using a button on 5 different MSP430 microcontrollers:
 
 * MSP430G2553
 * MSP430F5529
@@ -8,29 +8,29 @@ Control the state on and LED using a button
 * MSP430FR5994
 * MSP430FR6989
 
-
+Pressing the button on the microcontroller will cause the LED to turn on and off
 
 ## Code Configuration
 
-The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's.
+The following code can be used on all of the boards. The only change that is needed to be made is the pin assinments labeled as x's for the LED and y's for the Button
 
 ```c
-	int main(void)
+	void main(void)
 	{
-    		WDTCTL = WDTPW | WDTHOLD;           // Stop watchdog timer
+    		WDTCTL = WDTPW + WDTHOLD;
+    		PxDIR = BITx; // Declare Px.x as output
+    		PyREN = BITy; // Set Py.y as pull-up resistor (normally high)
+    		PyOUT = BITy;
 
-    		PxOUT &= ~BITx;                     // Clear Px.x output latch for a defined power-on state
-    		PxDIR |= BITx;                      // Set Px.x to output direction
-
-		PM5CTL0 &= ~LOCKLPM5;		    // Disable the GPIO power-on default high-impedance mode
-                                                    // to activate previously configured port settings
-						    // Use for FR6989, FR5994, and FR2311 
-    		while(1)
-    		{
-        		PxOUT ^= BITx;              // Toggle Px.x using exclusive-OR
-        		__delay_cycles(100000);    // Delay for 100000*(1/MCLK)=0.1s
-    		}
-
+    	while(1)
+    	{
+        	if((PyIN & BITy)!=BITy) // BIT1 will always stay as 1, if button is pressed 
+					// P1IN will go to 0, by default it is 1.
+        	{
+            		__delay_cycles(220000);
+           		 PxOUT ^= BITx;     // This will execute every time the button is pressed
+        	}
+    	}
 	}
 ```
 ## Pin Assignments
@@ -38,44 +38,34 @@ The following code can be used on all of the boards. The only change that is nee
 Depending on which LED is chosen to blink, the following pin assignments will declare the corresponding LED to blink:
 
 ```c		
-		   LED1		LED2
-* MSP430G2553	=> P1.0 	P1.6
-* MSP430F5529	=> P1.0 	P4.7
-* MSP430FR2311	=> P1.0 	P2.0
-* MSP430FR5994	=> P1.0 	P1.1
-* MSP430FR6989	=> P1.0 	P9.7
+		   LED1		LED2	BUTTON
+* MSP430G2553	=> P1.0 	P1.6	P1.3
+* MSP430F5529	=> P1.0 	P4.7	P2.1
+* MSP430FR2311	=> P1.0 	P2.0	P1.1
+* MSP430FR5994	=> P1.0 	P1.1	P5.6
+* MSP430FR6989	=> P1.0 	P9.7	P1.1
 ```
 
 ## Code Example
 
-Make LED2 on the MSP430F5529 blink
+Make LED1 on the MSP430F5529 turn on and off with a button
 
 ```c
-	int main(void)
+	void main(void)
 	{
-    		WDTCTL = WDTPW | WDTHOLD;           // Stop watchdog timer
+    		WDTCTL = WDTPW + WDTHOLD;
+    		P1DIR = BIT0; // Declare PIN 1.0 as output
+    		P2REN = BIT1; // Set PIN 2.1 as pull-up resistor (normally high)
+    		P2OUT = BIT1;
 
-    		P4OUT &= ~BIT7;                     // Clear Px.x output latch for a defined power-on state
-    		P4DIR |= BIT7;                      // Set Px.x to output direction
-
-    		while(1)
-    		{
-        		P4OUT ^= BIT7;              // Toggle Px.x using exclusive-OR
-        		__delay_cycles(100000);    // Delay for 100000*(1/MCLK)=0.1s
-    		}
-
+    	while(1)
+    	{
+        	if((P2IN & BIT1)!=BIT1) // BIT1 will always stay as 1, if button is pressed 
+					// P1IN will go to 0, by default it is 1.
+        	{
+            		__delay_cycles(220000);
+           		 P1OUT ^= BIT0;     // This will execute every time the button is pressed
+        	}
+    	}
 	}
 ```
-
-## LED Blink Rate
-
-The rate at which the LED blinks can simply be modified in the following line of code:
-
-```c
-    __delay_cycles(x);    // Delay for x*(1/MCLK) seconds
-
-```
-Adjusting the value of x will control the rate of the blink.
-* A greater value of x will result in a slower blink rate
-* A smaller value of x will result in a faster blink rate
-* Using a value of 100000 for x will cause the LED to blink eve 0.1s
