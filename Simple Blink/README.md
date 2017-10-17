@@ -76,6 +76,6 @@ The rate at which the LED blinks can simply be modified in the following line of
 
 ```
 Adjusting the value of x will control the rate of the blink.
-*A greater value of x will result in a slower blink rate
-*A smaller value of x will result in a faster blink rate
-*Using a value of 100000 for x will cause the LED to blink eve 0.1s
+* A greater value of x will result in a slower blink rate
+* A smaller value of x will result in a faster blink rate
+* Using a value of 100000 for x will cause the LED to blink eve 0.1s
