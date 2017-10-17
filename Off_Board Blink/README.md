@@ -39,7 +39,7 @@ After the code has been compiled onto the G2553 the chip can be placed on a brea
 * Pin 16 (RESET) was connected to power using a 1K to stop the chip from reseting
 * A bypass capacitor of 0.1 uF was hooked up from Pin 1 (DVCC) to GND
 
-![alt text](https://github.com/RU09342/lab-2-blinking-leds-bubliss3/blob/master/msp430G2553.png)
+![alt text](https://github.com/RU09342/lab-2-blinking-leds-bubliss3/blob/master/Off_Board%20Blink/msp430G2553.png)
 
 ## Breadboard Demonstration
 
